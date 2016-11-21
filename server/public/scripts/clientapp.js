@@ -28,9 +28,9 @@ $(document).ready(function () {
     postTreat(newTreat);
   });
 
-  $('body').on('dblclick', 'h3', toInput); //on double click, change treat names to inputs
-  $('body').on('dblclick', 'p', toInput);//same, but for treat description
-  $()
+  $('body').on('dblclick', 'h3', toNameInput); //on double click, change treat names to inputs
+  $('body').on('dblclick', 'p', toDescriptionInput);//same, but for treat description
+  $('body').on('click', '#update', updateTreat);
 
   /**---------- AJAX Functions ----------**/
 
@@ -42,7 +42,7 @@ $(document).ready(function () {
     })
     .done(function (treatArray) {
       console.log('GET /treats returned ', treatArray);
-
+      clearDom();
       $.each(treatArray, function (index, treat) {
         appendTreat(treat);
       });
@@ -123,7 +123,10 @@ $(document).ready(function () {
 
   function updateTreat() {
     var treatId = $(this).parent().data('id');
-    var treatUpdate = $(this).prev().val();
+    var treatUpdate = {
+      updateText: $(this).prev().val(),
+      updateField: $(this).prev().attr('id')
+    };
     $.ajax({
       type: 'PUT',
       url: '/treats/' + treatId,
@@ -134,9 +137,14 @@ $(document).ready(function () {
     });
   }
 
-  function toInput() {
+  function toNameInput() {
     var input = $(this).text();
-    $(this).replaceWith('<input class="newinput" type="text" value="' + input + '" />' +
+    $(this).replaceWith('<input id= "name" class="newinput" type="text" value="' + input + '" />' +
+    '<button id="update">update</button>');
+  }
+  function toDescriptionInput() {
+    var input = $(this).text();
+    $(this).replaceWith('<input id= "description" class="newinput" type="text" value="' + input + '" />' +
     '<button id="update">update</button>');
   }
 

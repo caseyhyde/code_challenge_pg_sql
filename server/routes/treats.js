@@ -39,5 +39,22 @@ router.post('/', function(req, res) {
     });//end query
   });//end connect
 });//end route
+router.get('/:query', function(req, res) { //search route
+  var query = "%" + req.params.query + "%";
+  pg.connect(connectionString, function(err, client, done) {
+    if(err) {
+      console.log("Could not connect to the database to get treats");
+      res.sendStatus(500);
+    }
+    client.query('SELECT * FROM treats WHERE name ILIKE ($1)', [query], function(err, result) {
+      done();
+      if(err) {
+        console.log("Query error getting treats");
+        res.sendStatus(500);
+      }
+      res.send(result.rows);
+    });//end query
+  });//end connect
+});//end route
 
 module.exports = router;

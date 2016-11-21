@@ -116,4 +116,13 @@ $(document).ready(function () {
 
     $('.treat:last-of-type').append($treat);
   }
+
+  // function updateTreat() {
+  //
+  // }
+  //
+  // function toInput() {
+  //   $(this).
+  // }
+
 });

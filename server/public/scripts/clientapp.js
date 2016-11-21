@@ -28,6 +28,10 @@ $(document).ready(function () {
     postTreat(newTreat);
   });
 
+  $('body').on('dblclick', 'h3', toInput); //on double click, change treat names to inputs
+  $('body').on('dblclick', 'p', toInput);//same, but for treat description
+  $()
+
   /**---------- AJAX Functions ----------**/
 
   // GET /treats
@@ -117,12 +121,23 @@ $(document).ready(function () {
     $('.treat:last-of-type').append($treat);
   }
 
-  // function updateTreat() {
-  //
-  // }
-  //
-  // function toInput() {
-  //   $(this).
-  // }
+  function updateTreat() {
+    var treatId = $(this).parent().data('id');
+    var treatUpdate = $(this).prev().val();
+    $.ajax({
+      type: 'PUT',
+      url: '/treats/' + treatId,
+      data: treatUpdate,
+      success: function() {
+        getTreats();
+      }
+    });
+  }
+
+  function toInput() {
+    var input = $(this).text();
+    $(this).replaceWith('<input class="newinput" type="text" value="' + input + '" />' +
+    '<button id="update">update</button>');
+  }
 
 });
